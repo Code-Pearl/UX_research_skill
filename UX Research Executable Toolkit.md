@@ -410,10 +410,6 @@ Hand this sequence to an executor as the master workflow:
 6. **6.1** reflect after each stage → **6.2** update competence signatures.
 
 The connective tissue across all six phases is the governing principle: **collect behavioral evidence, prioritize by strength of evidence, and let the data — not opinion — decide**.[^1]
+  <!-- by CODE__PEARL | this-is-maddness.com -->
 
 ---
-
-## References
-
-1. [David-Travis_-Philip-Hodgson-Think-Like-a-UX-Researcher_-How-to-Observe-Users-Influence-Design-a.pdf](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/121264191/50d008a9-c6a7-4b0b-a820-0ae0769a5ca9/David-Travis_-Philip-Hodgson-Think-Like-a-UX-Researcher_-How-to-Observe-Users-Influence-Design-and-Shape-Business-Strategy-CRC-Press-2019.pdf?AWSAccessKeyId=ASIA2F3EMEYE5MPHQ76H&Signature=5jip%2B4TAz7Tn8H7MFwLgSfaa%2BKs%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEAkaCXVzLWVhc3QtMSJHMEUCIEvwyDTKu87BvZrxBMc1YXOYFLuCIzkzz0mF2BQHokXiAiEAtGj0iy7XGjG5vzo2oXMUgKiOAFAu%2BdmsBqphKOHbXwEq%2FAQI0f%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARABGgw2OTk3NTMzMDk3MDUiDI9HGFf25f11hmkmeyrQBCSBTK2givhTm6V5wzt2BjmlFCVlR9pJSyohHP%2FmYv8JfZc3%2FDa2pvmU6uefQ20jXXRlfyJypK%2Fg09Uqs5kD%2Fyfu6WNhVi8%2BeYz6RBnxYZPeC%2BXXFLO%2BHet5LHTL6tE39t%2B3VSR6eLfDDPy%2BS5I%2FvfCI9lhRkDqgn%2FgH%2BgdayzwQrq0U%2FPnXCWiWbRGIehnPZ0HsUJ8ka8K1ewueh9FIoX31U6keJxwr0OIKt3wE8F%2B6uK3vKjNSIVnEVkIybvErPw9Ii%2BU6Uql%2BvFDH7eH%2F7y5zct2ok5hnNBf84o%2BmmbnO6R7IutaAyHyOhPOkx3Ct3%2FX9xQfa%2BLX%2BXCOwzfHfN4PM0DdPcWAIqUXDT%2Bi6PRV04eZ2KDah025wnVKi9SQ14AeV%2FaoG7sh3PuwW%2FyFa1zfBcRbs5VjElJAVnkNhN%2BcinxwsmSjuLqT4A0Zt7FhvIF6hj6QXF8UgAohq%2B5hRGEejiBedjO%2BefYYce5O63juT42%2FevDiJFJkuOgI0ZIhb04J20fSRnetwgD6dcVHPVbHd2IoYP4LqR8Ne6ubChgakiH%2BJyObDAPLiFsbVWF%2BYPjGd4am%2FSvoXh1GPS2wwG4vFzemTBlzba9%2BF94bIj2oAWdoRoFnqRtuwwHua4tLcq%2Be17H6zayC4PfBWQB0FugI8F39y2l8TeCgmarszFnz9jbSuTHajTe5ej6%2BhfIqbzKJPPap5XTtSSJURf4qB8MQomqE1id9qlphuPqSx541KO0QvHR5P07inPsBrIERo%2Fb043e%2B3uUHAhMTQawCnozQwrL7T1QY6mAEeZXgzmoHf96ic9syj%2BAwHZ8BjSWqiL%2BorrTVQPGk4rwqKt00uem%2FplJ6EzawyeZLMFIkzmsxszZ4pybO5DJTUG1Lh824Gee39K%2FG0zlDAm7Fv6BOVFFas5jaLA6qA5krLbKHIX%2FAPcrJDmQ1vOKEO1TP1Lj836YVF3i1bpE5gVLNOOpZqd71P6ExPevHsgCCtssKBCEoGQQ%3D%3D&Expires=1790242047) - page-72 63PLAnnInG USER EXPERIEnCE RESEARCHthey also create a strong first impression of our ability...
-
