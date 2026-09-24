@@ -12,3 +12,4 @@ This is a hand-off document. Give it to a person or an AI and they can run a ful
 The frameworks are ordered in the sequence a real project runs: **Frame → Plan → Recruit → Conduct → Analyze → Act → Improve**. Run them top to bottom. Skip a block only when its WHEN condition is not met.
 
 ***
+ ' <!-- by CODE__PEARL | this-is-maddness.com -->'
