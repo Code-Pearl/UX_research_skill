@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UX Research Field Guide — RouteMate Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root, [data-theme="light"]{
+  --bg:#ffffff;
+  --surface:#fafafa;
+  --surface-2:#f4f4f5;
+  --surface-3:#ececed;
+  --ink:#1a1a1a;
+  --ink-2:#4a4a4a;
+  --ink-3:#8a8a8a;
+  --line:#e2e2e4;
+  --line-strong:#cfcfd2;
+  --accent:#1a1a1a;
+  --accent-soft:#f0f0f0;
+  --good:#2f6b3a;
+  --good-bg:#eef5ef;
+  --bad:#8a2d2d;
+  --bad-bg:#f6eded;
+  --warn:#7a5a1a;
+  --warn-bg:#f6f1e6;
+  --code-bg:#f4f4f5;
+  --font:'Fira Code','SFMono-Regular',monospace;
+  /* 1.25 modular scale (major third) */
+  --p:1rem;             /* 16 */
+  --h3:1.25rem;         /* 20 */
+  --h2:1.5625rem;       /* 25 */
+  --h1:1.953rem;        /* 31.25 */
+  --xl:2.441rem;        /* 39 */
+  --sm:0.8rem;          /* 12.8 */
+  --xs:0.64rem;         /* 10.24 */
+}
+[data-theme="dark"]{
+  --bg:#151517;
+  --surface:#1c1c1f;
+  --surface-2:#212125;
+  --surface-3:#2a2a2f;
+  --ink:#e8e8ea;
+  --ink-2:#b4b4b8;
+  --ink-3:#7c7c82;
+  --line:#2e2e33;
+  --line-strong:#3c3c42;
+  --accent:#e8e8ea;
+  --accent-soft:#2a2a2f;
+  --good:#7fbf8a;
+  --good-bg:#1e2a20;
+  --bad:#d98d8d;
+  --bad-bg:#2c1e1e;
+  --warn:#d4b56a;
+  --warn-bg:#2a2418;
+  --code-bg:#212125;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth;scroll-padding-top:70px}
+body{
+  font-family:var(--font);
+  font-size:var(--p);
+  line-height:1.7;
+  color:var(--ink);
+  background:var(--bg);
+  font-weight:300;
+}
+/* ============ TYPE ============ */
+h1{font-size:var(--h1);line-height:1.2;font-weight:700;letter-spacing:-.01em;margin-bottom:.6em}
+h2{font-size:var(--h2);line-height:1.25;font-weight:600;letter-spacing:-.01em;margin:0 0 .5em}
+h3{font-size:var(--h3);line-height:1.3;font-weight:600;margin:0 0 .5em}
+h4{font-size:var(--p);font-weight:600;margin:0 0 .4em;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-2)}
+p{margin-bottom:1em;max-width:74ch;color:var(--ink-2);font-weight:300}
+p strong,li strong{color:var(--ink);font-weight:600}
+ul,ol{margin:0 0 1em 1.2em;color:var(--ink-2);font-weight:300}
+li{margin-bottom:.4em;max-width:74ch}
+a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+code{font-family:var(--font);background:var(--code-bg);padding:.1em .4em;border-radius:4px;font-size:.9em;color:var(--ink)}
+/* ============ LAYOUT ============ */
+.wrap{max-width:920px;margin:0 auto;padding:0 24px}
+header.top{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.top-inner{max-width:920px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:var(--sm);letter-spacing:.02em}
+.brand svg{width:26px;height:26px}
+.top nav{display:flex;gap:4px;flex-wrap:wrap}
+.top nav a{font-size:var(--xs);text-decoration:none;color:var(--ink-3);padding:5px 9px;border-radius:6px;font-weight:400}
+.top nav a:hover{color:var(--ink);background:var(--surface-2)}
+.toggle{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;width:34px;height:34px;display:grid;place-items:center;cursor:pointer;color:var(--ink);flex:none}
+/* hero */
+.hero{padding:80px 0 56px;border-bottom:1px solid var(--line)}
+.hero .kicker{font-size:var(--xs);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin-bottom:18px}
+.hero h1{font-size:var(--xl);max-width:20ch}
+.hero .lead{font-size:var(--h3);color:var(--ink-2);max-width:60ch;font-weight:300;line-height:1.5}
+.hero .meta{margin-top:28px;display:flex;flex-wrap:wrap;gap:10px}
+.pill{font-size:var(--xs);border:1px solid var(--line-strong);border-radius:999px;padding:5px 12px;color:var(--ink-2);background:var(--surface)}
+/* phase sections alternate bg */
+section.phase{padding:64px 0;border-bottom:1px solid var(--line)}
+section.phase:nth-of-type(even){background:var(--surface)}
+.phase-tag{font-size:var(--xs);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:500;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.phase-tag .num{display:inline-grid;place-items:center;width:26px;height:26px;border:1px solid var(--line-strong);border-radius:6px;font-weight:700;color:var(--ink);font-size:var(--xs)}
+.phase>.wrap>h2{font-size:var(--h1);margin-bottom:.3em}
+.phase-intro{max-width:70ch;margin-bottom:8px}
+/* framework card */
+.fw{
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:28px 30px;
+  margin-top:28px;
+  box-shadow:0 1px 2px rgba(0,0,0,.03),0 6px 20px rgba(0,0,0,.02);
+}
+section.phase:nth-of-type(even) .fw{background:var(--bg)}
+.fw-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.fw-id{font-size:var(--sm);font-weight:700;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:2px 8px;flex:none}
+.fw h3{margin-bottom:.2em}
+.meta-grid{display:grid;grid-template-columns:120px 1fr;gap:2px 16px;margin:16px 0;font-size:var(--sm)}
+.meta-grid dt{color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:var(--xs);padding-top:4px}
+.meta-grid dd{color:var(--ink-2);font-weight:300}
+.steps{counter-reset:s;list-style:none;margin:14px 0 0;padding:0}
+.steps>li{counter-increment:s;position:relative;padding-left:38px;margin-bottom:12px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:24px;height:24px;background:var(--accent);color:var(--bg);border-radius:6px;display:grid;place-items:center;font-size:var(--xs);font-weight:700}
+/* example box */
+.example{margin-top:18px;border:1px dashed var(--line-strong);border-radius:10px;padding:18px 20px;background:var(--surface)}
+.example .lab{font-size:var(--xs);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.example .lab::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--accent)}
+.example p:last-child{margin-bottom:0}
+/* formula box */
+.formula{margin:16px 0;background:var(--code-bg);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:16px 20px;font-size:var(--sm);overflow-x:auto}
+.formula .flab{font-size:var(--xs);text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);margin-bottom:8px;font-weight:600}
+.formula .eq{font-size:var(--p);color:var(--ink);font-weight:500;white-space:pre-wrap}
+.formula .note{font-size:var(--xs);color:var(--ink-3);margin-top:8px}
+/* callout */
+.callout{margin:20px 0;border-radius:10px;padding:16px 20px;font-size:var(--sm);border:1px solid var(--line)}
+.callout.good{background:var(--good-bg);border-color:color-mix(in srgb,var(--good) 30%,transparent)}
+.callout.bad{background:var(--bad-bg);border-color:color-mix(in srgb,var(--bad) 30%,transparent)}
+.callout.warn{background:var(--warn-bg);border-color:color-mix(in srgb,var(--warn) 30%,transparent)}
+.callout .ct{font-weight:700;font-size:var(--xs);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.callout.good .ct{color:var(--good)}
+.callout.bad .ct{color:var(--bad)}
+.callout.warn .ct{color:var(--warn)}
+.callout p{margin:0;color:var(--ink-2)}
+/* table */
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:var(--sm)}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:var(--xs);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);font-weight:600;border-bottom:1px solid var(--line-strong)}
+td{color:var(--ink-2);font-weight:300}
+tr:last-child td{border-bottom:none}
+.tag{display:inline-block;font-size:var(--xs);padding:2px 8px;border-radius:999px;font-weight:600}
+.tag.crit{background:var(--bad-bg);color:var(--bad)}
+.tag.ser{background:var(--warn-bg);color:var(--warn)}
+.tag.med{background:var(--surface-3);color:var(--ink-2)}
+.tag.low{background:var(--surface-2);color:var(--ink-3)}
+.tag.strong{background:var(--good-bg);color:var(--good)}
+/* svg figure */
+figure{margin:22px 0;border:1px solid var(--line);border-radius:12px;padding:22px;background:var(--surface)}
+figure svg{width:100%;height:auto;display:block}
+figcaption{font-size:var(--xs);color:var(--ink-3);margin-top:12px;text-align:center;letter-spacing:.03em}
+.svg-ink{stroke:var(--ink)}
+.svg-fill{fill:var(--ink)}
+.svg-muted{stroke:var(--ink-3)}
+.svg-line{stroke:var(--line-strong)}
+.svg-txt{fill:var(--ink);font-family:var(--font);font-weight:400}
+.svg-txt-m{fill:var(--ink-3);font-family:var(--font);font-weight:400}
+.svg-surf{fill:var(--surface-2)}
+.svg-accent{fill:var(--accent)}
+.svg-accent-txt{fill:var(--bg);font-family:var(--font);font-weight:600}
+footer.foot{padding:48px 0 64px;text-align:center}
+footer.foot p{margin:0 auto;color:var(--ink-3);font-size:var(--sm)}
+.toc{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px 28px}
+.toc h4{margin-bottom:14px}
+.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc;columns:2;column-gap:32px}
+.toc li{counter-increment:toc;margin-bottom:8px;font-size:var(--sm);break-inside:avoid}
+.toc li a{text-decoration:none;color:var(--ink-2);display:flex;gap:10px}
+.toc li a:hover{color:var(--ink)}
+.toc li a::before{content:counter(toc,decimal-leading-zero);color:var(--ink-3);font-weight:600}
+@media(max-width:640px){
+  :root{--xl:1.95rem;--h1:1.6rem;--h2:1.35rem;--h3:1.15rem}
+  .fw{padding:22px 18px}
+  .meta-grid{grid-template-columns:1fr}
+  .meta-grid dt{padding-top:10px}
+  .toc ol{columns:1}
+  .top nav{display:none}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" fill="none" aria-label="RouteMate">
+        <rect x="2" y="2" width="28" height="28" rx="7" stroke="currentColor" stroke-width="2"/>
+        <circle cx="11" cy="11" r="2.4" fill="currentColor"/>
+        <circle cx="21" cy="21" r="2.4" fill="currentColor"/>
+        <path d="M11 11 C 20 11, 12 21, 21 21" stroke="currentColor" stroke-width="2" stroke-dasharray="2.5 2.5" fill="none"/>
+      </svg>
+      <span>UX RESEARCH FIELD GUIDE</span>
+    </div>
+    <nav>
+      <a href="#p1">1 · Frame</a>
+      <a href="#p2">2 · Plan</a>
+      <a href="#p3">3 · Conduct</a>
+      <a href="#p4">4 · Analyze</a>
+      <a href="#p5">5 · Act</a>
+      <a href="#p6">6 · Improve</a>
+    </nav>
+    <button class="toggle" data-theme-toggle aria-label="Switch to dark mode">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="kicker">A visual, end-to-end walkthrough · after Travis &amp; Hodgson, <em>Think Like a UX Researcher</em></div>
+    <h1>How to run UX research, one framework at a time.</h1>
+    <p class="lead">A single case study &mdash; <strong>RouteMate</strong>, a route-planning app for delivery drivers &mdash; carried through all six phases. Every framework shows <strong>when</strong> to use it, the <strong>steps</strong>, the <strong>formula</strong> where one exists, and a <strong>worked example</strong> on the same app so you always see what "done" looks like.</p>
+    <div class="meta">
+      <span class="pill">Case study: RouteMate delivery app</span>
+      <span class="pill">6 phases</span>
+      <span class="pill">14 frameworks</span>
+      <span class="pill">Formulas + diagrams</span>
+    </div>
+
+    <div class="toc">
+      <h4>Contents</h4>
+      <ol>
+        <li><a href="#principle">The governing principle &amp; evidence ladder</a></li>
+        <li><a href="#f11">Two-Question Method Selector</a></li>
+        <li><a href="#f12">Anatomy of a Research Question</a></li>
+        <li><a href="#f13">The Four Problem-Definition Techniques</a></li>
+        <li><a href="#f14">Desk Research (Venn method)</a></li>
+        <li><a href="#f21">The 2&times;2 User-Group Grid</a></li>
+        <li><a href="#f22">The Perfect Participant Screener</a></li>
+        <li><a href="#f31">Field Visit / Contextual Research</a></li>
+        <li><a href="#f32">Writing Test Tasks</a></li>
+        <li><a href="#f33">Moderating: The Five Mistakes</a></li>
+        <li><a href="#f34">Usability Expert Review</a></li>
+        <li><a href="#f35">Controlling Researcher Bias</a></li>
+        <li><a href="#f41">Observations &rarr; Insights &rarr; Solutions</a></li>
+        <li><a href="#f42">Severity Decision Tree</a></li>
+        <li><a href="#f51">The Agile 2D-Sketch Persona</a></li>
+        <li><a href="#f61">Structured Reflection (5 Whys)</a></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- PRINCIPLE -->
+<section class="phase" id="principle">
+  <div class="wrap">
+    <div class="phase-tag"><span class="num">0</span> Read this first</div>
+    <h2>The governing principle</h2>
+    <p class="phase-intro">Everything below rests on one rule of thumb: <strong>behavioral data is strong; opinion data is weak.</strong> UX research observes what people <em>do</em>, not what they <em>say</em> or <em>like</em> &mdash; because for every 10 people who like a design, 10 will hate it and 10 won't care. Never pick a method first ("let's do a survey"); decide what data you need, then let the method follow.</p>
+
+    <figure>
+      <svg viewBox="0 0 820 220" role="img" aria-label="Strength of evidence ladder">
+        <!-- strong -->
+        <rect x="20" y="20" width="780" height="52" rx="8" class="svg-surf"/>
+        <rect x="20" y="20" width="8" height="52" rx="4" class="svg-fill"/>
+        <text x="44" y="42" class="svg-txt" font-size="15" font-weight="600">STRONG &mdash; behavioral, task-based, observable</text>
+        <text x="44" y="62" class="svg-txt-m" font-size="12">Field visits · usability tests · web/search analytics · A/B tests · task analysis</text>
+        <!-- moderate -->
+        <rect x="20" y="84" width="600" height="52" rx="8" class="svg-surf"/>
+        <rect x="20" y="84" width="8" height="52" rx="4" class="svg-muted" fill="currentColor" opacity="0.55"/>
+        <text x="44" y="106" class="svg-txt" font-size="15" font-weight="600">MODERATE &mdash; includes tasks or self-report</text>
+        <text x="44" y="126" class="svg-txt-m" font-size="12">Heuristic eval · expert review · interviews · journey maps · card sorts · diary studies</text>
+        <!-- weak -->
+        <rect x="20" y="148" width="420" height="52" rx="8" class="svg-surf"/>
+        <rect x="20" y="148" width="8" height="52" rx="4" fill="currentColor" opacity="0.25"/>
+        <text x="44" y="170" class="svg-txt" font-size="15" font-weight="600">WEAK &mdash; opinion &amp; guesswork (avoid)</text>
+        <text x="44" y="190" class="svg-txt-m" font-size="12">"Which do you like?" tests · focus groups · surveys · intuition · the boss's opinion</text>
+        <text x="812" y="44" class="svg-txt-m" font-size="11" text-anchor="end">wider = more</text>
+        <text x="812" y="58" class="svg-txt-m" font-size="11" text-anchor="end">credible</text>
+      </svg>
+      <figcaption>Fig. 0 &mdash; The strength-of-evidence ladder. Wider bar = stronger, more defensible data. Choose the strongest method your budget allows.</figcaption>
+    </figure>
+
+    <div class="callout good">
+      <div class="ct">The RouteMate mantra</div>
+      <p>"Will drivers <em>use</em> RouteMate to plan a multi-stop run faster than they do today?" is a behavioral question. "Do drivers <em>like</em> the new map?" is an opinion question &mdash; we will not build decisions on it.</p>
+    </div>
+  </div>
+</section>
+<!-- ============ PHASE 1 ============ -->
+<section class="phase" id="p1">
+  <div class="wrap">
+    <div class="phase-tag"><span class="num">1</span> Phase</div>
+    <h2>Frame the problem</h2>
+    <p class="phase-intro">Before recruiting anyone, decide <em>what</em> you're researching and <em>why</em>. Skip this and you get "method-led" research that skims the surface. For RouteMate we start knowing only that a logistics company thinks drivers "waste time planning routes."</p>
+
+    <!-- 1.1 -->
+    <div class="fw" id="f11">
+      <div class="fw-head"><span class="fw-id">1.1</span><h3>Two-Question Method Selector</h3></div>
+      <dl class="meta-grid">
+        <dt>When</dt><dd>At the very start, to decide what <em>type</em> of research you need.</dd>
+        <dt>Inputs</dt><dd>A rough problem statement + where you are in the lifecycle.</dd>
+        <dt>Output</dt><dd>One decision: field visit, usability test, or both.</dd>
+      </dl>
+      <p>All UX research answers one of two questions. Map your situation to the right one:</p>
+      <figure>
+        <svg viewBox="0 0 820 210" role="img" aria-label="Two question selector">
+          <rect x="20" y="20" width="370" height="170" rx="10" class="svg-surf"/>
+          <rect x="430" y="20" width="370" height="170" rx="10" class="svg-surf"/>
+          <text x="40" y="52" class="svg-txt" font-size="14" font-weight="700">Q(a) Who are our users &amp;</text>
+          <text x="40" y="72" class="svg-txt" font-size="14" font-weight="700">what are they trying to do?</text>
+          <text x="40" y="104" class="svg-txt-m" font-size="12">Discovery phase · "turn on the lights"</text>
+          <rect x="40" y="126" width="200" height="34" rx="8" class="svg-accent"/>
+          <text x="140" y="148" class="svg-accent-txt" font-size="13" text-anchor="middle">&rarr; FIELD VISIT</text>
+          <text x="40" y="182" class="svg-txt-m" font-size="11">validates the PROBLEM hypothesis</text>
+
+          <text x="450" y="52" class="svg-txt" font-size="14" font-weight="700">Q(b) Can people use the</text>
+          <text x="450" y="72" class="svg-txt" font-size="14" font-weight="700">thing we've designed?</text>
+          <text x="450" y="104" class="svg-txt-m" font-size="12">Later phase · "look under microscope"</text>
+          <rect x="450" y="126" width="230" height="34" rx="8" class="svg-accent"/>
+          <text x="565" y="148" class="svg-accent-txt" font-size="13" text-anchor="middle">&rarr; USABILITY TEST</text>
+          <text x="450" y="182" class="svg-txt-m" font-size="11">validates the SOLUTION hypothesis</text>
+        </svg>
+        <figcaption>Fig. 1.1 &mdash; Field visits tell you if you're building the <em>right thing</em>; usability tests tell you if you built the <em>thing right</em>.</figcaption>
+      </figure>
+      <div class="example">
+        <div class="lab">RouteMate example</div>
+        <p>We have no evidence drivers actually struggle with route planning &mdash; it's an assumption from management. <strong>Decision:</strong> run <em>field research first</em> (validate the problem: is planning really painful and costly?), then usability-test the RouteMate prototype later (validate the solution).</p>
+      </div>
+    </div>
+
+    <!-- 1.2 -->
+    <div class="fw" id="f12">
+      <div class="fw-head"><span class="fw-id">1.2</span><h3>Anatomy of a Research Question</h3></div>
+      <dl class="meta-grid">
+        <dt>When</dt><dd>Before any study, to replace vague goals with one real question.</dd>
+        <dt>Inputs</dt><dd>The problem area + stakeholder goals.</dd>
+        <dt>Output</dt><dd>One sentence you could write on a whiteboard, ending in "?".</dd>
+      </dl>
+      <p>The research question is <em>not</em> a question you ask a participant. It's the underlying driver of the whole study. Score every candidate against six criteria &mdash; if it fails one, rewrite it.</p>
+      <div class="formula">
+        <div class="flab">The 6-criteria checklist (all must pass)</div>
+        <div class="eq">RQ is valid  =  Interesting
+                &and; Important
+                &and; Focused &amp; specific
+                &and; Leads to a testable hypothesis
+                &and; Predicts from measurable data
+                &and; Advances knowledge beyond the obvious</div>
+        <div class="note">Fail any one condition &rarr; the question is not yet ready.</div>
+      </div>
+      <div class="example">
+        <div class="lab">RouteMate example</div>
+        <p><strong>Weak objective:</strong> "We want to understand how drivers plan routes." (Not focused, not testable.)<br>
+        <strong>Strong research question:</strong> "<em>What causes multi-drop drivers to deviate from their planned route, and how much time does each deviation cost?</em>" &mdash; specific, important, measurable (deviations, minutes lost), and testable.</p>
+      </div>
+    </div>
+
+    <!-- 1.3 -->
+    <div class="fw" id="f13">
+      <div class="fw-head"><span class="fw-id">1.3</span><h3>The Four Problem-Definition Techniques</h3></div>
+      <dl class="meta-grid">
+        <dt>When</dt><dd>The brief is weak, or you have time to sharpen the problem.</dd>
+        <dt>Inputs</dt><dd>Initial brief/RFP + access to stakeholders.</dd>
+        <dt>Output</dt><dd>Refined problem, stakeholder-needs list, measurable sub-components, surfaced risks.</dd>
+      </dl>
+      <ol class="steps">
+        <li><strong>Find out what other stakeholders need to know.</strong> List every stakeholder and meet them; ask what's been tried, why now, what success looks like, constraints, timeline, budget.</li>
+        <li><strong>Deconstruct the construct.</strong> Things like "usability" can't be observed directly &mdash; break them into measurable sub-components (read the literature; don't guess).</li>
+        <li><strong>Measure something.</strong> Ask what specifically to measure, the dependent variable, what to control, and whether it will convince the team.</li>
+        <li><strong>Shake out the issues.</strong> Run a cheap <em>pre-pilot</em> ("hit the grass to startle the snake") to surface hidden problems and missed stakeholders before spending budget.</li>
+      </ol>
+      <div class="formula">
+        <div class="flab">Deconstructing the construct "usability" (ISO 9241-11)</div>
+        <div class="eq">Usability  =  Effectiveness  +  Efficiency  +  Satisfaction
+
+  Effectiveness &rarr; task completion rate     (% of runs planned correctly)
+  Efficiency    &rarr; time on task, error count (minutes to plan a 12-stop run)
+  Satisfaction  &rarr; post-task SEQ / SUS       (secondary, weak evidence)</div>
+        <div class="note">Now every sub-component is separately measurable &rarr; the study design writes itself.</div>
+      </div>
+      <div class="example">
+        <div class="lab">RouteMate example</div>
+        <p>Stakeholder interviews reveal dispatch managers (want fewer support calls), drivers (want fewer taps while driving), and legal (phone-use-while-driving liability). The pre-pilot &mdash; shadowing one driver for a morning &mdash; surfaces a hidden constraint: drivers wear gloves, so tiny tap targets fail. That single finding reshapes the whole test plan.</p>
+      </div>
+    </div>
+
+    <!-- 1.4 -->
+    <div class="fw" id="f14">
+      <div class="fw-head"><span class="fw-id">1.4</span><h3>Desk Research &mdash; the Venn Method</h3></div>
+      <dl class="meta-grid">
+        <dt>When</dt><dd>Before any primary research, to avoid re-discovering what's known.</dd>
+        <dt>Inputs</dt><dd>The product domain + access to internal reports/analytics.</dd>
+        <dt>Output</dt><dd>A synthesis of prior findings + explicit gaps.</dd>
+      </dl>
+      <p>Model the context of use as three circles &mdash; <strong>Users</strong>, <strong>Goals</strong>, <strong>Environments</strong>. The centre (your users, their goals, in context) is the rare sweet spot. Mine every overlap for existing evidence.</p>
+      <figure>
+        <svg viewBox="0 0 820 300" role="img" aria-label="Venn diagram users goals environments">
+          <circle cx="330" cy="130" r="110" fill="none" class="svg-line" stroke-width="1.5"/>
+          <circle cx="490" cy="130" r="110" fill="none" class="svg-line" stroke-width="1.5"/>
+          <circle cx="410" cy="220" r="110" fill="none" class="svg-line" stroke-width="1.5"/>
+          <text x="250" y="95" class="svg-txt" font-size="15" font-weight="700" text-anchor="middle">USERS</text>
+          <text x="570" y="95" class="svg-txt" font-size="15" font-weight="700" text-anchor="middle">GOALS</text>
+          <text x="410" y="285" class="svg-txt" font-size="15" font-weight="700" text-anchor="middle">ENVIRONMENTS</text>
+          <circle cx="410" cy="160" r="8" class="svg-accent"/>
+          <text x="410" y="150" class="svg-txt" font-size="11" text-anchor="middle" font-weight="600">sweet spot</text>
+          <text x="335" y="180" class="svg-txt-m" font-size="10" text-anchor="middle">interviews,</text>
+          <text x="335" y="192" class="svg-txt-m" font-size="10" text-anchor="middle">surveys</text>
+          <text x="490" y="180" class="svg-txt-m" font-size="10" text-anchor="middle">web / call-</text>
+          <text x="490" y="192" class="svg-txt-m" font-size="10" text-anchor="middle">centre analytics</text>
+        </svg>
+        <figcaption>Fig. 1.4 &mdash; The context-of-use Venn. Search each overlap for research that already exists before collecting anything new.</figcaption>
+      </figure>
+      <div class="example">
+        <div class="lab">RouteMate example</div>
+        <p>No study exists on our exact app, but desk research finds: internal <strong>dispatch logs</strong> (goals + environment) showing the top re-route reasons, a <strong>driver-satisfaction survey</strong> (users + goals), and an academic <strong>ethnography of gig couriers</strong> (users + environment). Together they frame the field study &mdash; and flag that "failed delivery attempts" is the costliest gap.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ PHASE 2 ============ -->
+<section class="phase" id="p2">
+  <div class="wrap">
+    <div class="phase-tag"><span class="num">2</span> Phase</div>
+    <h2>Plan &amp; recruit</h2>
+    <p class="phase-intro">"Our app is for everyone" is how products fail. Pick <em>which</em> users teach you the most, fastest &mdash; then recruit them with a screener that filters on behavior, not demographics.</p>
+
+    <!-- 2.1 -->
+    <div class="fw" id="f21">
+      <div class="fw-head"><span class="fw-id">2.1</span><h3>The 2&times;2 User-Group Grid</h3></div>
+      <dl class="meta-grid">
+        <dt>When</dt><dd>The team says "everyone," or you don't know who to research first.</dd>
+        <dt>Inputs</dt><dd>The team + sticky notes.</dd>
+        <dt>Output</dt><dd>Gold / silver / bronze user groups.</dd>
+      </dl>
+      <p>Each person writes &ge;5 candidate user groups (one per sticky). Plot each on two axes and read off the priority.</p>
+      <div class="formula">
+        <div class="flab">Priority score for a user group</div>
+        <div class="eq">Priority  =  Learning &times; Access
+
+  where Learning = how much this group teaches about our riskiest assumptions
+        Access   = how easily we can reach &amp; schedule them</div>
+        <div class="note">Both high &rarr; GOLD (start now) · high-learning/low-access &rarr; SILVER (backlog) · low-learning/high-access &rarr; BRONZE (later) · low/low &rarr; SKIP.</div>
+      </div>
+      <figure>
+        <svg viewBox="0 0 620 360" role="img" aria-label="2x2 grid">
+          <line x1="70" y1="30" x2="70" y2="320" class="svg-line" stroke-width="1.5"/>
+          <line x1="70" y1="320" x2="560" y2="320" class="svg-line" stroke-width="1.5"/>
+          <line x1="315" y1="30" x2="315" y2="320" class="svg-line" stroke-width="1" stroke-dasharray="4 4"/>
+          <line x1="70" y1="175" x2="560" y2="175" class="svg-line" stroke-width="1" stroke-dasharray="4 4"/>
+          <text x="55" y="180" class="svg-txt-m" font-size="11" text-anchor="end" transform="rotate(-90 55 180)">Amount we expect to learn &rarr;</text>
+          <text x="315" y="345" class="svg-txt-m" font-size="11" text-anchor="middle">Ease of access &rarr;</text>
+          <!-- SILVER top-left -->
+          <text x="192" y="95" class="svg-txt" font-size="13" font-weight="700" text-anchor="middle">SILVER</text>
+          <text x="192" y="114" class="svg-txt-m" font-size="10" text-anchor="middle">plan these next</text>
+          <!-- GOLD top-right -->
+          <rect x="330" y="45" width="215" height="115" rx="8" class="svg-surf"/>
+          <text x="437" y="95" class="svg-txt" font-size="13" font-weight="700" text-anchor="middle">GOLD &mdash; START HERE</text>
+          <text x="437" y="114" class="svg-txt-m" font-size="10" text-anchor="middle">multi-drop city couriers</text>
+          <!-- skip bottom-left -->
+          <text x="192" y="250" class="svg-txt-m" font-size="12" text-anchor="middle" font-style="italic">skip (guilt-free)</text>
+          <!-- bronze bottom-right -->
+          <text x="437" y="250" class="svg-txt" font-size="13" font-weight="700" text-anchor="middle">BRONZE</text>
+          <text x="437" y="269" class="svg-txt-m" font-size="10" text-anchor="middle">occasional weekend drivers</text>
+        </svg>
+        <figcaption>Fig. 2.1 &mdash; Start in the top-right (gold). RouteMate's gold group: full-time multi-drop city couriers &mdash; high learning, easy to reach.</figcaption>
+      </figure>
+      <div class="example">
+        <div class="lab">RouteMate example</div>
+        <p>Groups generated: city multi-drop couriers, long-haul drivers, weekend gig drivers, dispatch managers. <strong>Gold</strong> = city multi-drop couriers (feel the pain daily, easy to shadow). <strong>Silver</strong> = long-haul (high learning, hard to schedule) &rarr; backlog. <strong>Skip</strong> = weekend gig drivers (low learning, and we'd burn budget).</p>
+      </div>
+    </div>
+
+    <!-- 2.2 -->
+    <div class="fw" id="f22">
+      <div class="fw-head"><span class="fw-id">2.2</span><h3>The Perfect Participant Screener (8 rules)</h3></div>
+      <dl class="meta-grid">
+        <dt>When</dt><dd>Recruiting anyone &mdash; get representative, articulate people; avoid no-shows.</dd>
+        <dt>Inputs</dt><dd>Behavioral profile of target users + recruiting channel.</dd>
+        <dt>Output</dt><dd>A tested screener + a confirmed roster.</dd>
+      </dl>
+      <table>
+        <thead><tr><th>#</th><th>Rule</th><th>RouteMate application</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Screen for behaviors, not demographics</td><td>Classify each candidate high/low on <em>digital skills</em> &amp; <em>domain (driving) knowledge</em>, not age.</td></tr>
+          <tr><td>2</td><td>Ask precise questions</td><td>Not "are you techy?" but "do you use nav apps daily, and do you edit stops mid-route?"</td></tr>
+          <tr><td>3</td><td>Identify unsuitable candidates early</td><td>Funnel: exclusion questions first. Open "where do you work?" (avoids "faking good").</td></tr>
+          <tr><td>4</td><td>Get value-for-money participants</td><td>For think-aloud, screen out inarticulate candidates via one open question.</td></tr>
+          <tr><td>5</td><td>Manage expectations</td><td>State: interviewed alone, recorded, cash on attendance, NDA &mdash; not a focus group.</td></tr>
+          <tr><td>6</td><td>Pilot-test the screener</td><td>Run on people you want / don't want; get stakeholder sign-off so the sample can't be dismissed later.</td></tr>
+          <tr><td>7</td><td>Avoid no-shows</td><td>Confirm day-before, text on the day; recruit paid <em>floaters</em>; double-recruit critical slots.</td></tr>
+          <tr><td>8</td><td>Brief the recruiting company</td><td>Walk the <em>actual</em> recruiter through the screener; flag where flexibility is allowed.</td></tr>
+        </tbody>
+      </table>
+      <div class="formula">
+        <div class="flab">The two behavioral screening variables (web/app projects)</div>
+        <div class="eq">Recruit a MIX across the 2&times;2 of:
+
+   Digital skills  {low, high}   &times;   Domain knowledge {low, high}
+
+  &rarr; ensures you see novices AND experts, not just one corner.</div>
+      </div>
+      <div class="example">
+        <div class="lab">RouteMate example</div>
+        <p>Screener classifies drivers as high/low digital-skill (uses nav apps unaided vs. asks family) and high/low domain (does &ge;15 drops/day vs. occasional). We recruit 2 from each cell (8 total) so RouteMate is tested by both a fumble-fingered veteran and a tech-savvy newbie.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ PHASE 3 ============ -->
+<section class="phase" id="p3">
+  <div class="wrap">
+    <div class="phase-tag"><span class="num">3</span> Phase</div>
+    <h2>Conduct the research</h2>
+    <p class="phase-intro">Now you collect the strong, behavioral evidence &mdash; first by observing drivers in the wild, then by watching them attempt real tasks on the RouteMate prototype without you getting in the way.</p>
+
+    <!-- 3.1 -->
+    <div class="fw" id="f31">
+      <div class="fw-head"><span class="fw-id">3.1</span><h3>Field Visit / Contextual Research</h3></div>
+      <dl class="meta-grid">
+        <dt>When</dt><dd>Answering "who are our users &amp; what are they trying to do?"</dd>
+        <dt>Inputs</dt><dd>Recruited users in their real environment.</dd>
+        <dt>Output</dt><dd>Observations feeding personas, journey maps, task models.</dd>
+      </dl>
+      <ol class="steps">
+        <li>Go where the action happens (the cab, the depot) &mdash; "safari, not the zoo." Observe natural behavior in its natural environment.</li>
+        <li>Record what people <em>do</em>, not just what they say.</li>
+        <li>Capture the six things every model needs: goals, task workflow, mental models, tools, environments, and the <em>terminology</em> people use.</li>
+        <li>Use it to validate the problem hypothesis: is this a real, serious problem &mdash; or an itch nobody will pay to scratch?</li>
+      </ol>
+      <div class="example">
+        <div class="lab">RouteMate example</div>
+        <p>Riding along, we see a courier "plan his route around lunch so he's near a bakery at noon" &mdash; a real goal invisible in a lab. We also observe he re-sequences stops by memory at each traffic light (dangerous) and calls dispatch when a customer isn't home. <strong>Terminology:</strong> he says "drops," never "deliveries"; "the run," never "the route." RouteMate's copy must match.</p>
+      </div>
+    </div>
+
+    <!-- 3.2 -->
+    <div class="fw" id="f32">
+      <div class="fw-head"><span class="fw-id">3.2</span><h3>Writing Test Tasks (not questions)</h3></div>
+      <dl class="meta-grid">
+        <dt>When</dt><dd>Preparing a usability test.</dd>
+        <dt>Inputs</dt><dd>Top user tasks (ideally from field research).</dd>
+        <dt>Output</dt><dd>A realistic task/scenario set.</dd>
+      </dl>
+      <p><strong>There are no questions in usability &mdash; you write a list of tasks.</strong> A good task is realistic, measurable, and does <em>not</em> reveal the solution path.</p>
+      <div class="callout bad"><div class="ct">Don't (opinion-seeking)</div><p>"Do you find it easy to add a delivery stop?" &mdash; invites an opinion and leads the witness.</p></div>
+      <div class="callout good"><div class="ct">Do (behavioral task)</div><p>"You've just been told parcel #4402 for 14 Oak Street must be delivered before 11am. Add it to today's run and make sure it happens in time." &mdash; realistic, measurable (did they succeed? how long?), not leading.</p></div>
+    </div>
+
+    <!-- 3.3 -->
+    <div class="fw" id="f33">
+      <div class="fw-head"><span class="fw-id">3.3</span><h3>Moderating: The Five Mistakes to Avoid</h3></div>
+      <dl class="meta-grid">
+        <dt>When</dt><dd>Running any moderated usability session.</dd>
+        <dt>Inputs</dt><dd>Participant, tasks, recording.</dd>
+        <dt>Output</dt><dd>Clean behavioral observations with minimal moderator bias.</dd>
+      </dl>
+      <table>
+        <thead><tr><th>Mistake</th><th>The fix</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1. Talking too much</strong></td><td>Embrace silence. Intro &le;5 min. If you must speak, only: <em>"Tell me more about that."</em></td></tr>
+          <tr><td><strong>2. Explaining the design</strong></td><td>Never "what the developers meant was&hellip;" Instead: <em>"Tell me what you're doing right now."</em></td></tr>
+          <tr><td><strong>3. Answering questions</strong></td><td><em>Boomerang</em>: answer a question with a question &mdash; "How do you think you'd do that?"</td></tr>
+          <tr><td><strong>4. Interviewing not testing</strong></td><td>Sit behind &amp; to one side; avoid eye contact. Save questions for a <em>post-test</em> interview.</td></tr>
+          <tr><td><strong>5. Soliciting opinions</strong></td><td>Never "which do you prefer?" Usability = what <em>works</em> best, not what they <em>like</em>.</td></tr>
+        </tbody>
+      </table>
+      <div class="example">
+        <div class="lab">RouteMate example</div>
+        <p>A driver asks, "Where's the button to reorder stops?" The novice moderator points to it (Mistake 3). The correct move: <em>"Where would you expect to find it?"</em> &mdash; then watch where he actually looks. He taps the map three times before finding the list &mdash; revealing this is a <em>critical</em>, not cosmetic, problem.</p>
+      </div>
+    </div>
+
+    <!-- 3.4 -->
+    <div class="fw" id="f34">
+      <div class="fw-head"><span class="fw-id">3.4</span><h3>Usability Expert Review</h3></div>
+      <dl class="meta-grid">
+        <dt>When</dt><dd>Efficient problem-finding without recruiting users, or before testing.</dd>
+        <dt>Inputs</dt><dd>The interface + a data-driven description of users &amp; tasks + 3&ndash;5 reviewers.</dd>
+        <dt>Output</dt><dd>A consolidated, severity-rated list of predicted problems.</dd>
+      </dl>
+      <p>Fix the four classic errors: (1) take the <em>user's</em> perspective, not yours ("it doesn't matter what you like"); (2) use 3&ndash;5 reviewers, not one; (3) use technology-specific guidelines; (4) rate which problems matter.</p>
+      <div class="formula">
+        <div class="flab">Why several reviewers &mdash; problems found rises with reviewer count</div>
+        <div class="eq">Problems found  =  1 &minus; (1 &minus; p)&#8319;
+
+  p = fraction of problems one reviewer finds  (&asymp; 0.35)
+  n = number of reviewers
+
+  n=1 &rarr; ~35%     n=3 &rarr; ~73%     n=5 &rarr; ~88%</div>
+        <div class="note">Same math underlies "5 users find ~85% of problems." Different reviewers catch different problem types.</div>
+      </div>
+      <div class="example">
+        <div class="lab">RouteMate example</div>
+        <p>Three reviewers each first write the courier's goals/tasks, then inspect independently: a logistics-domain reviewer flags that "estimated arrival" ignores loading time; a visual reviewer flags 28px tap targets (fails for gloved hands); an IA reviewer flags that "Runs" and "History" are indistinguishable. Merged &amp; severity-rated &rarr; one prioritized backlog.</p>
+      </div>
+    </div>
+
+    <!-- 3.5 -->
+    <div class="fw" id="f35">
+      <div class="fw-head"><span class="fw-id">3.5</span><h3>Controlling Researcher Bias</h3></div>
+      <dl class="meta-grid">
+        <dt>When</dt><dd>Every study &mdash; bias favors the researcher's hypothesis ~70% of the time.</dd>
+        <dt>Inputs</dt><dd>The protocol + data loggers.</dd>
+        <dt>Output</dt><dd>A bias-controlled protocol + defensible dataset.</dd>
+      </dl>
+      <ul>
+        <li><strong>Interaction bias (Clever Hans):</strong> stay neutral in tone, posture, expression; don't nod toward the sponsor's design; stay out of the participant's sightline; review your own session video for "tells."</li>
+        <li><strong>Recording/interpreting bias:</strong> fix data-logging codes and pass/fail criteria <em>beforehand</em>; use &ge;2 loggers for inter-scorer reliability; record verbatim, not interpretation.</li>
+        <li><strong>Sponsorship/confirmation bias:</strong> "you shouldn't care what the outcome is &mdash; only that your data is bulletproof." Report negatives straight.</li>
+      </ul>
+      <div class="callout warn">
+        <div class="ct">Caught on tape</div>
+        <p>RouteMate moderator stayed neutral introducing the old app, but leaned in and nodded while introducing the new prototype &mdash; a Clever Hans tell caught only by reviewing the recording. Fixed by scripting a flat, identical intro for both.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ PHASE 4 ============ -->
+<section class="phase" id="p4">
+  <div class="wrap">
+    <div class="phase-tag"><span class="num">4</span> Phase</div>
+    <h2>Analyze</h2>
+    <p class="phase-intro">A usability test finds problems, not solutions. Here you turn a fire-hose of raw observations into a ranked, defensible list of fixes.</p>
+
+    <!-- 4.1 -->
+    <div class="fw" id="f41">
+      <div class="fw-head"><span class="fw-id">4.1</span><h3>Observations &rarr; Insights &rarr; Hypotheses &rarr; Solutions</h3></div>
+      <dl class="meta-grid">
+        <dt>When</dt><dd>After a usability test, to convert observations into fixes.</dd>
+        <dt>Inputs</dt><dd>Raw observations, sticky notes, the team, a whiteboard.</dd>
+        <dt>Output</dt><dd>Top-3 insights, each with hypotheses and a minimal testable change.</dd>
+      </dl>
+      <figure>
+        <svg viewBox="0 0 820 130" role="img" aria-label="Analysis pipeline">
+          <g font-family="var(--font)">
+            <rect x="10" y="35" width="150" height="60" rx="10" class="svg-surf"/>
+            <text x="85" y="60" class="svg-txt" font-size="13" font-weight="700" text-anchor="middle">OBSERVATIONS</text>
+            <text x="85" y="80" class="svg-txt-m" font-size="10" text-anchor="middle">what you saw/heard</text>
+            <rect x="230" y="35" width="150" height="60" rx="10" class="svg-surf"/>
+            <text x="305" y="60" class="svg-txt" font-size="13" font-weight="700" text-anchor="middle">INSIGHTS</text>
+            <text x="305" y="80" class="svg-txt-m" font-size="10" text-anchor="middle">affinity + POV headline</text>
+            <rect x="450" y="35" width="150" height="60" rx="10" class="svg-surf"/>
+            <text x="525" y="60" class="svg-txt" font-size="13" font-weight="700" text-anchor="middle">HYPOTHESES</text>
+            <text x="525" y="80" class="svg-txt-m" font-size="10" text-anchor="middle">candidate root causes</text>
+            <rect x="660" y="35" width="150" height="60" rx="10" class="svg-accent"/>
+            <text x="735" y="60" class="svg-accent-txt" font-size="13" text-anchor="middle">SOLUTIONS</text>
+            <text x="735" y="80" fill="var(--bg)" font-size="10" text-anchor="middle" opacity=".85">smallest fix that works</text>
+            <path d="M162 65 h64" class="svg-ink" stroke-width="1.5" marker-end="url(#ar)"/>
+            <path d="M382 65 h64" class="svg-ink" stroke-width="1.5" marker-end="url(#ar)"/>
+            <path d="M602 65 h54" class="svg-ink" stroke-width="1.5" marker-end="url(#ar)"/>
+          </g>
+          <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L7 4 L0 8" fill="none" class="svg-ink" stroke-width="1.5"/></marker></defs>
+        </svg>
+        <figcaption>Fig. 4.1 &mdash; The analysis pipeline. Reduce duplicates &rarr; affinity-group (~100 obs &rarr; 10&ndash;15 groups) &rarr; write provocative insights &rarr; dot-vote top 3 &rarr; smallest testable fix.</figcaption>
+      </figure>
+      <div class="callout warn"><div class="ct">Keep data clean</div><p>An <em>observation</em> is objective ("3 of 8 drivers tapped the map to reorder stops"). It is NOT an interpretation ("the reorder control is unclear") and NOT a solution ("add a drag handle"). Those come later.</p></div>
+      <div class="example">
+        <div class="lab">RouteMate example &mdash; one thread end to end</div>
+        <p><strong>Observations:</strong> 6/8 drivers never used the "&#8942;" more-menu; 5/8 tapped the map to reorder.<br>
+        <strong>Insight (headline):</strong> "Drivers don't recognise the &#8942; as a control &mdash; they treat the map as the interface."<br>
+        <strong>Hypotheses:</strong> (a) they think &#8942; is branding; (b) it's too far top-right where gloved thumbs don't reach; (c) they assume reordering happens by dragging pins.<br>
+        <strong>Smallest solution to test next:</strong> replace &#8942; with a visible "Reorder stops" button on the list, and enable pin-dragging on the map. Each hypothesis maps to a different tweak &mdash; A/B in the next sprint.</p>
+      </div>
+    </div>
+
+    <!-- 4.2 -->
+    <div class="fw" id="f42">
+      <div class="fw-head"><span class="fw-id">4.2</span><h3>Severity Decision Tree (3 questions)</h3></div>
+      <dl class="meta-grid">
+        <dt>When</dt><dd>A test returns 100+ issues and the team needs to know what to fix first.</dd>
+        <dt>Inputs</dt><dd>The list of problems.</dd>
+        <dt>Output</dt><dd>Every problem tagged Critical / Serious / Medium / Low, transparently.</dd>
+      </dl>
+      <p>Ask three yes/no questions of each problem and walk the tree. No gut feel &mdash; a developer can't argue with a repeatable rule.</p>
+      <figure>
+        <svg viewBox="0 0 820 300" role="img" aria-label="Severity decision tree">
+          <g font-family="var(--font)" font-size="11">
+            <!-- nodes -->
+            <rect x="20" y="130" width="130" height="44" rx="8" class="svg-surf"/><text x="85" y="150" class="svg-txt" text-anchor="middle" font-weight="600">High impact?</text><text x="85" y="165" class="svg-txt-m" text-anchor="middle" font-size="9">blocks completion?</text>
+            <rect x="210" y="60" width="130" height="44" rx="8" class="svg-surf"/><text x="275" y="80" class="svg-txt" text-anchor="middle" font-weight="600">Many users?</text>
+            <rect x="210" y="200" width="130" height="44" rx="8" class="svg-surf"/><text x="275" y="220" class="svg-txt" text-anchor="middle" font-weight="600">Many users?</text>
+            <rect x="400" y="30" width="130" height="40" rx="8" class="svg-surf"/><text x="465" y="54" class="svg-txt" text-anchor="middle">Persistent?</text>
+            <rect x="400" y="95" width="130" height="40" rx="8" class="svg-surf"/><text x="465" y="119" class="svg-txt" text-anchor="middle">Persistent?</text>
+            <rect x="400" y="180" width="130" height="40" rx="8" class="svg-surf"/><text x="465" y="204" class="svg-txt" text-anchor="middle">Persistent?</text>
+            <!-- outcomes -->
+            <rect x="590" y="24" width="120" height="34" rx="8" fill="var(--bad)"/><text x="650" y="45" fill="#fff" text-anchor="middle" font-weight="700">CRITICAL</text>
+            <rect x="590" y="66" width="120" height="34" rx="8" fill="var(--warn)"/><text x="650" y="87" fill="#fff" text-anchor="middle" font-weight="700">SERIOUS</text>
+            <rect x="590" y="110" width="120" height="34" rx="8" class="svg-surf"/><text x="650" y="131" class="svg-txt" text-anchor="middle" font-weight="700">MEDIUM</text>
+            <rect x="590" y="176" width="120" height="34" rx="8" class="svg-surf"/><text x="650" y="197" class="svg-txt" text-anchor="middle" font-weight="700">MEDIUM/LOW</text>
+            <rect x="590" y="220" width="120" height="34" rx="8" class="svg-surf" opacity="0.6"/><text x="650" y="241" class="svg-txt-m" text-anchor="middle" font-weight="700">LOW</text>
+            <!-- edges -->
+            <g class="svg-ink" stroke-width="1.3" fill="none">
+              <path d="M150 145 C 180 110, 180 90, 210 82"/><path d="M150 160 C 180 195, 180 215, 210 222"/>
+              <path d="M340 74 C 365 60, 375 50, 400 50"/><path d="M340 90 C 365 105, 375 112, 400 115"/>
+              <path d="M340 214 C 365 200, 375 196, 400 200"/><path d="M340 230 C 365 235, 375 236, 400 236" opacity=".5"/>
+              <path d="M530 45 h56" marker-end="url(#ar2)"/><path d="M530 60 C 560 68, 565 78, 588 82" marker-end="url(#ar2)"/>
+              <path d="M530 110 C 558 118, 565 122, 588 126" marker-end="url(#ar2)"/><path d="M530 125 C 560 160, 565 185, 588 192" marker-end="url(#ar2)"/>
+              <path d="M530 195 h56" marker-end="url(#ar2)"/><path d="M530 215 C 560 225, 565 232, 588 236" marker-end="url(#ar2)"/>
+            </g>
+            <text x="178" y="108" class="svg-txt-m" font-size="9">Y</text><text x="178" y="192" class="svg-txt-m" font-size="9">N</text>
+          </g>
+          <defs><marker id="ar2" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0 0 L6 3.5 L0 7" fill="none" class="svg-ink" stroke-width="1.3"/></marker></defs>
+        </svg>
+        <figcaption>Fig. 4.2 &mdash; The three-question severity tree: Impact &rarr; Number affected &rarr; Persistence.</figcaption>
+      </figure>
+      <div class="formula">
+        <div class="flab">Severity interpretation &amp; action</div>
+        <div class="eq">CRITICAL &rarr; users can't/won't finish a common task   &rarr; fix urgently
+SERIOUS  &rarr; significantly slows / forces a workaround  &rarr; fix ASAP
+MEDIUM   &rarr; frustrating but doesn't block completion   &rarr; next BAU update
+LOW      &rarr; cosmetic (typo, alignment)                 &rarr; minor (but too many = brand damage)</div>
+      </div>
+      <table>
+        <thead><tr><th>RouteMate problem</th><th>Impact</th><th>Many?</th><th>Persistent?</th><th>Severity</th></tr></thead>
+        <tbody>
+          <tr><td>Reorder control (&#8942;) undiscoverable</td><td>Blocks core task</td><td>6/8</td><td>Every run screen</td><td><span class="tag crit">CRITICAL</span></td></tr>
+          <tr><td>Tap targets too small for gloves</td><td>Slows, forces retries</td><td>4/8</td><td>All buttons</td><td><span class="tag ser">SERIOUS</span></td></tr>
+          <tr><td>"ETA" ignores loading time</td><td>Annoying, workaround</td><td>3/8</td><td>Local</td><td><span class="tag med">MEDIUM</span></td></tr>
+          <tr><td>"Delivery" vs driver's word "drop"</td><td>Mild confusion</td><td>2/8</td><td>Copy</td><td><span class="tag low">LOW</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<!-- ============ PHASE 5 ============ -->
+<section class="phase" id="p5">
+  <div class="wrap">
+    <div class="phase-tag"><span class="num">5</span> Phase</div>
+    <h2>Act on the findings</h2>
+    <p class="phase-intro">Research that doesn't change the product is theatre. Package what you learned into a lightweight, updatable user model and secure named owners for each fix.</p>
+
+    <!-- 5.1 -->
+    <div class="fw" id="f51">
+      <div class="fw-head"><span class="fw-id">5.1</span><h3>The Agile 2D-Sketch Persona</h3></div>
+      <dl class="meta-grid">
+        <dt>When</dt><dd>You need a lightweight, updatable user model &mdash; not a glossy, "cast-in-concrete" persona.</dd>
+        <dt>Inputs</dt><dd>Completed research (you must have done it), flip-chart, Sharpies, sticky notes, the team.</dd>
+        <dt>Output</dt><dd>A disposable, wall-mounted conversation-starter.</dd>
+      </dl>
+      <p>Split flip-chart paper into four quadrants; fill each with one item per sticky note. Prioritise, discuss, post on a wall, update as you learn. <strong>Do not polish it</strong> &mdash; "it's the process that matters, not the beauty of the artifact."</p>
+      <figure>
+        <svg viewBox="0 0 700 400" role="img" aria-label="2D sketch persona quadrants">
+          <line x1="350" y1="20" x2="350" y2="380" class="svg-line" stroke-width="1.5"/>
+          <line x1="20" y1="200" x2="680" y2="200" class="svg-line" stroke-width="1.5"/>
+          <!-- TL name+sketch -->
+          <text x="40" y="50" class="svg-txt-m" font-size="10" letter-spacing="1">NAME + SKETCH IN CONTEXT</text>
+          <text x="40" y="90" class="svg-txt" font-size="18" font-weight="700">"Multi-drop Marek"</text>
+          <circle cx="80" cy="140" r="20" fill="none" class="svg-ink" stroke-width="1.5"/>
+          <path d="M60 175 q20 -25 40 0" fill="none" class="svg-ink" stroke-width="1.5"/>
+          <rect x="130" y="118" width="70" height="44" rx="4" fill="none" class="svg-ink" stroke-width="1.5"/>
+          <path d="M135 130 h60 M135 142 h40" class="svg-muted" stroke-width="1.3"/>
+          <text x="230" y="145" class="svg-txt-m" font-size="10">"12 drops before</text>
+          <text x="230" y="158" class="svg-txt-m" font-size="10">lunch, then re-plan"</text>
+          <!-- TR behaviors -->
+          <text x="375" y="50" class="svg-txt-m" font-size="10" letter-spacing="1">BEHAVIORS</text>
+          <g font-size="11">
+            <rect x="375" y="65" width="180" height="30" rx="4" class="svg-surf"/><text x="385" y="84" class="svg-txt">Re-sequences stops at lights</text>
+            <rect x="375" y="102" width="200" height="30" rx="4" class="svg-surf"/><text x="385" y="121" class="svg-txt">Calls dispatch when no-one home</text>
+            <rect x="375" y="139" width="150" height="30" rx="4" class="svg-surf"/><text x="385" y="158" class="svg-txt">Wears gloves all shift</text>
+          </g>
+          <!-- BL facts -->
+          <text x="40" y="230" class="svg-txt-m" font-size="10" letter-spacing="1">FACTS</text>
+          <g font-size="11">
+            <rect x="40" y="245" width="120" height="30" rx="4" class="svg-surf"/><text x="50" y="264" class="svg-txt">Age 41, 8 yrs driving</text>
+            <rect x="40" y="282" width="150" height="30" rx="4" class="svg-surf"/><text x="50" y="301" class="svg-txt">High domain, low digital</text>
+            <rect x="40" y="319" width="130" height="30" rx="4" class="svg-surf"/><text x="50" y="338" class="svg-txt">Android phone, cradle</text>
+          </g>
+          <!-- BR needs -->
+          <text x="375" y="230" class="svg-txt-m" font-size="10" letter-spacing="1">NEEDS &amp; GOALS</text>
+          <g font-size="11">
+            <rect x="375" y="245" width="200" height="30" rx="4" class="svg-surf"/><text x="385" y="264" class="svg-txt">Finish the run without stress</text>
+            <rect x="375" y="282" width="175" height="30" rx="4" class="svg-surf"/><text x="385" y="301" class="svg-txt">Never miss a time-window</text>
+            <rect x="375" y="319" width="205" height="30" rx="4" class="svg-surf"/><text x="385" y="338" class="svg-txt">Keep eyes on the road, not screen</text>
+          </g>
+        </svg>
+        <figcaption>Fig. 5.1 &mdash; RouteMate's 2D-sketch persona. Four quadrants, sticky notes, deliberately rough &mdash; a conversation starter, not a deliverable.</figcaption>
+      </figure>
+    </div>
+
+    <!-- 5.2 action -->
+    <div class="fw">
+      <div class="fw-head"><span class="fw-id">5.2</span><h3>Getting the Team to Act</h3></div>
+      <ol class="steps">
+        <li>Run a one-day research + design workshop to transition findings and solutions to the team.</li>
+        <li>Provide specific, actionable recommendations &mdash; you're a full team member, not just a critic.</li>
+        <li>Agree accountability: a named owner for every recommendation.</li>
+        <li>Promote iterative design: schedule a re-test of the revised prototype.</li>
+        <li>Present clear next steps; chair the design meetings, don't just attend.</li>
+      </ol>
+      <table>
+        <thead><tr><th>Fix</th><th>Owner</th><th>Re-test</th></tr></thead>
+        <tbody>
+          <tr><td>Visible "Reorder stops" button + map drag</td><td>Design lead</td><td>Sprint 7</td></tr>
+          <tr><td>Enlarge all tap targets to 48px</td><td>Front-end dev</td><td>Sprint 7</td></tr>
+          <tr><td>ETA includes loading buffer</td><td>Routing eng.</td><td>Sprint 8</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PHASE 6 ============ -->
+<section class="phase" id="p6">
+  <div class="wrap">
+    <div class="phase-tag"><span class="num">6</span> Phase</div>
+    <h2>Improve your practice</h2>
+    <p class="phase-intro">The last framework turns the researcher into a better researcher &mdash; run it after every stage, not just at the end.</p>
+
+    <div class="fw" id="f61">
+      <div class="fw-head"><span class="fw-id">6.1</span><h3>Structured Reflection (with 5 Whys)</h3></div>
+      <dl class="meta-grid">
+        <dt>When</dt><dd>Continuously, after each stage of a project.</dd>
+        <dt>Inputs</dt><dd>A just-completed activity + a journal.</dd>
+        <dt>Output</dt><dd>A dated entry that feeds future case studies and skills.</dd>
+      </dl>
+      <ol class="steps">
+        <li><strong>What</strong> did you do? (date, method, sample, duration)</li>
+        <li><strong>Why</strong> that activity rather than another?</li>
+        <li><strong>What went well?</strong> 2&ndash;3 specifics.</li>
+        <li><strong>What went badly?</strong> 2&ndash;3 specifics.</li>
+        <li><strong>Analyze</strong> each point with the <em>5 Whys</em> &mdash; drill to the root cause.</li>
+        <li><strong>Integrate</strong> &amp; ask "<strong>What if?</strong>" &mdash; what will you do differently next time?</li>
+      </ol>
+      <div class="formula">
+        <div class="flab">5 Whys on a RouteMate session that overran</div>
+        <div class="eq">Problem: only 3 of 5 tasks fit in the 60-min session.
+  Why? &rarr; the intro ran 15 minutes.
+  Why? &rarr; I over-explained the prototype.
+  Why? &rarr; I was nervous about silence.
+  Why? &rarr; I hadn't rehearsed a tight script.
+  Why? &rarr; no pre-pilot of the session timing.
+ROOT CAUSE &rarr; skipped session pilot. FIX &rarr; pilot timing; cap intro at 5 min (see 3.3, Mistake 1).</div>
+      </div>
+    </div>
+
+    <div class="callout good">
+      <div class="ct">The whole loop, in one line</div>
+      <p>Frame &rarr; Plan &rarr; Conduct &rarr; Analyze &rarr; Act &rarr; Improve &mdash; and back again. The connective tissue across all six phases is the governing principle: <strong>collect behavioral evidence, prioritise by strength of evidence, and let the data &mdash; not opinion &mdash; decide.</strong></p>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>UX Research Field Guide &middot; frameworks extracted from <em>Think Like a UX Researcher</em> (Travis &amp; Hodgson, CRC Press 2019) &middot; worked throughout on the RouteMate delivery-app case study.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var t=document.querySelector('[data-theme-toggle]'),r=document.documentElement;
+  var d=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+  r.setAttribute('data-theme',d);
+  function icon(m){return m==='dark'
+    ?'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
+    :'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';}
+  if(t){t.innerHTML=icon(d);t.addEventListener('click',function(){d=d==='dark'?'light':'dark';r.setAttribute('data-theme',d);t.innerHTML=icon(d);t.setAttribute('aria-label','Switch to '+(d==='dark'?'light':'dark')+' mode');});}
+})();
+</script>
+</body>
+</html>
